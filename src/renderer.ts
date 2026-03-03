@@ -29,30 +29,37 @@ export class DocsRenderer {
   }
 
   private renderEndpoint(ep: EndpointModel, showExamples: boolean): HTMLElement {
-    const card = el('div', 'ep');
-
-    card.appendChild(renderEndpointTitle(ep));
-
+    // Collapsible endpoint card using native <details>/<summary>
+    const details = el('details', 'ep');
+  
+    const summary = el('summary', 'ep-summary');
+    summary.appendChild(renderEndpointTitle(ep));
+  
     if (ep.summary) {
-      const s = el('div', 'muted');
+      const s = el('span', 'ep-summary-text');
       s.textContent = ep.summary;
-      card.appendChild(s);
+      summary.appendChild(s);
     }
-
+  
+    details.appendChild(summary);
+  
+    const body = el('div', 'ep-body');
+  
     if (ep.parameters.length) {
-      card.appendChild(h3('Parameters'));
-      card.appendChild(this.renderParameters(ep.parameters, showExamples));
+      body.appendChild(h3('Parameters'));
+      body.appendChild(this.renderParameters(ep.parameters, showExamples));
     }
-
+  
     if (ep.requestBody) {
-      card.appendChild(h3('Request body'));
-      card.appendChild(this.renderBody(ep.requestBody, showExamples));
+      body.appendChild(h3('Request body'));
+      body.appendChild(this.renderBody(ep.requestBody, showExamples));
     }
-
-    card.appendChild(h3('Responses'));
-    card.appendChild(this.renderResponses(ep.responses, showExamples));
-
-    return card;
+  
+    body.appendChild(h3('Responses'));
+    body.appendChild(this.renderResponses(ep.responses, showExamples));
+  
+    details.appendChild(body);
+    return details;
   }
 
   private renderParameters(params: ParameterModel[], showExamples: boolean): HTMLElement {
