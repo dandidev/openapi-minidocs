@@ -4,7 +4,6 @@
   "paths": {
     "/users": {
       "get": {
-        "summary": "List users",
         "tags": ["Users"],
         "parameters": [
           { "name": "page", "in": "query", "schema": { "type": "integer", "default": 0 } },
@@ -25,7 +24,6 @@
       },
       "post": {
         "summary": "Create user",
-        "tags": ["Users"],
         "requestBody": {
           "required": true,
           "content": {
@@ -55,7 +53,6 @@
     "/users/{id}": {
       "get": {
         "summary": "Get user by id",
-        "tags": ["Users"],
         "parameters": [
           { "name": "id", "in": "path", "required": true, "schema": { "type": "integer", "format": "int32" } }
         ],
@@ -72,7 +69,6 @@
       },
 
       "put": {
-        "summary": "Update user (full replace)",
         "tags": ["Users"],
         "parameters": [
           { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
@@ -165,8 +161,6 @@
 
     "/auth/login": {
       "post": {
-        "summary": "Login",
-        "tags": ["Auth"],
         "requestBody": {
           "required": true,
           "content": {
@@ -239,7 +233,6 @@
 
     "/health": {
       "get": {
-        "summary": "Health check",
         "tags": ["System"],
         "responses": {
           "200": {
