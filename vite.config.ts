@@ -9,6 +9,12 @@ export default defineConfig({
       fileName: () => 'minidocs.min.js'
     },
     outDir: 'dist',
-    emptyOutDir: true
+    emptyOutDir: true,
+    cssCodeSplit: false,
+    rollupOptions: {
+      output: {
+        inlineDynamicImports: true,
+      },
+    },
   }
 });
