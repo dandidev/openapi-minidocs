@@ -1,0 +1,395 @@
+{
+  "openapi": "3.1.0",
+  "info": { "title": "Sample Advanced API", "version": "1.0.0" },
+  "paths": {
+    "/users": {
+      "get": {
+        "summary": "List users",
+        "tags": ["Users"],
+        "parameters": [
+          { "name": "page", "in": "query", "schema": { "type": "integer", "default": 0 } },
+          { "name": "size", "in": "query", "schema": { "type": "integer", "default": 20 } },
+          { "name": "q", "in": "query", "schema": { "type": "string" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": { "type": "array", "items": { "$ref": "#/components/schemas/User" } },
+                "example": [{ "id": 1, "name": "Alice", "email": "alice@test.com" }]
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "summary": "Create user",
+        "tags": ["Users"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/CreateUserRequest" },
+              "example": {
+                "name": "Bob",
+                "email": "bob@test.com",
+                "address": { "street": "Main st 1", "city": "Budapest", "zip": "1051" }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/UserDetail" } } }
+          },
+          "400": {
+            "description": "Validation error",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } }
+          }
+        }
+      }
+    },
+
+    "/users/{id}": {
+      "get": {
+        "summary": "Get user by id",
+        "tags": ["Users"],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer", "format": "int32" } }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/UserDetail" } } }
+          },
+          "404": {
+            "description": "Not found",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } }
+          }
+        }
+      },
+
+      "put": {
+        "summary": "Update user (full replace)",
+        "tags": ["Users"],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/UpdateUserRequest" },
+              "example": {
+                "name": "Alice Updated",
+                "email": "alice.updated@test.com",
+                "address": { "street": "New st 9", "city": "Szeged", "zip": "6720" },
+                "roles": ["USER", "ADMIN"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/UserDetail" } } }
+          },
+          "400": {
+            "description": "Validation error",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } }
+          },
+          "404": {
+            "description": "Not found",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } }
+          }
+        }
+      },
+
+      "delete": {
+        "summary": "Delete user",
+        "tags": ["Users"],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "responses": {
+          "204": { "description": "Deleted" },
+          "409": {
+            "description": "Conflict",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } }
+          }
+        }
+      }
+    },
+
+    "/users/{id}/preferences": {
+      "patch": {
+        "summary": "Update user preferences (map/dict body)",
+        "tags": ["Users"],
+        "parameters": [
+          { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/PreferencesPatchRequest" },
+              "example": {
+                "preferences": {
+                  "theme": "dark",
+                  "language": "hu",
+                  "notifications.email": "true"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/PreferencesResponse" },
+                "example": { "userId": 1, "preferences": { "theme": "dark", "language": "hu" } }
+              }
+            }
+          },
+          "404": {
+            "description": "Not found",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } }
+          }
+        }
+      }
+    },
+
+    "/auth/login": {
+      "post": {
+        "summary": "Login",
+        "tags": ["Auth"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/LoginRequest" },
+              "example": { "username": "alice", "password": "secret" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/AuthToken" },
+                "example": { "token": "eyJhbGciOi...", "expiresInSeconds": 3600 }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } }
+          }
+        }
+      }
+    },
+
+    "/orders": {
+      "post": {
+        "summary": "Create order (nested + array in request)",
+        "tags": ["Orders"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/CreateOrderRequest" },
+              "example": {
+                "customerId": 1,
+                "shippingAddress": { "street": "Main st 1", "city": "Budapest", "zip": "1051" },
+                "items": [
+                  { "sku": "SAT-001", "quantity": 2, "unitPrice": 12.5 },
+                  { "sku": "SAT-002", "quantity": 1, "unitPrice": 99.9 }
+                ],
+                "notes": "Leave at reception"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Created",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Order" },
+                "example": {
+                  "orderId": 1001,
+                  "status": "CREATED",
+                  "total": 124.9
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error",
+            "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ErrorResponse" } } }
+          }
+        }
+      }
+    },
+
+    "/health": {
+      "get": {
+        "summary": "Health check",
+        "tags": ["System"],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": { "type": "object", "additionalProperties": { "type": "string" } },
+                "example": { "status": "UP", "db": "UP", "redis": "UP" }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+
+  "components": {
+    "schemas": {
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" },
+          "email": { "type": "string" }
+        }
+      },
+
+      "UserDetail": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "name": { "type": "string" },
+          "email": { "type": "string" },
+          "address": { "$ref": "#/components/schemas/Address" },
+          "roles": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+
+      "CreateUserRequest": {
+        "type": "object",
+        "required": ["name", "email"],
+        "properties": {
+          "name": { "type": "string" },
+          "email": { "type": "string" },
+          "address": { "$ref": "#/components/schemas/Address" }
+        }
+      },
+
+      "UpdateUserRequest": {
+        "type": "object",
+        "required": ["name", "email"],
+        "properties": {
+          "name": { "type": "string" },
+          "email": { "type": "string" },
+          "address": { "$ref": "#/components/schemas/Address" },
+          "roles": { "type": "array", "items": { "type": "string" } }
+        }
+      },
+
+      "PreferencesPatchRequest": {
+        "type": "object",
+        "required": ["preferences"],
+        "properties": {
+          "preferences": {
+            "type": "object",
+            "additionalProperties": { "type": "string" }
+          }
+        }
+      },
+
+      "PreferencesResponse": {
+        "type": "object",
+        "properties": {
+          "userId": { "type": "integer" },
+          "preferences": {
+            "type": "object",
+            "additionalProperties": { "type": "string" }
+          }
+        }
+      },
+
+      "LoginRequest": {
+        "type": "object",
+        "required": ["username", "password"],
+        "properties": {
+          "username": { "type": "string" },
+          "password": { "type": "string" }
+        }
+      },
+
+      "AuthToken": {
+        "type": "object",
+        "properties": {
+          "token": { "type": "string" },
+          "expiresInSeconds": { "type": "integer" }
+        }
+      },
+
+      "CreateOrderRequest": {
+        "type": "object",
+        "required": ["customerId", "items", "shippingAddress"],
+        "properties": {
+          "customerId": { "type": "integer" },
+          "shippingAddress": { "$ref": "#/components/schemas/Address" },
+          "items": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/OrderItem" }
+          },
+          "notes": { "type": "string" }
+        }
+      },
+
+      "OrderItem": {
+        "type": "object",
+        "required": ["sku", "quantity"],
+        "properties": {
+          "sku": { "type": "string" },
+          "quantity": { "type": "integer" },
+          "unitPrice": { "type": "number", "format": "double" }
+        }
+      },
+
+      "Order": {
+        "type": "object",
+        "properties": {
+          "orderId": { "type": "integer" },
+          "status": { "type": "string" },
+          "total": { "type": "number", "format": "double" }
+        }
+      },
+
+      "Address": {
+        "type": "object",
+        "properties": {
+          "street": { "type": "string" },
+          "city": { "type": "string" },
+          "zip": { "type": "string" }
+        }
+      },
+
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "timestamp": { "type": "string" },
+          "status": { "type": "integer" },
+          "error": { "type": "string" },
+          "message": { "type": "string" },
+          "details": { "type": "object", "additionalProperties": { "type": "string" } }
+        }
+      }
+    }
+  }
+}

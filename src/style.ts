@@ -1,0 +1,50 @@
+export function injectBaseStyle(title: string): HTMLElement {
+    const style = document.createElement('style');
+    style.textContent = `
+      body { margin:0; font-family: system-ui, -apple-system, sans-serif; background:#fff; color:#111; }
+      header { padding:16px 24px; border-bottom:1px solid #e5e5e5; font-size:18px; font-weight:600; background:#fff; position:sticky; top:0; z-index:10; }
+      main { padding:20px 24px 40px; max-width:1000px; }
+  
+      .muted { color:#666; font-size:13px; margin-top:8px; }
+      .grp { margin-top:18px; }
+      .grp h2 { margin:18px 0 10px; font-size:14px; text-transform:uppercase; letter-spacing:.08em; color:#444; }
+  
+      .ep { border:1px solid #eee; border-radius:12px; padding:16px; margin:16px 0; }
+      .ep-title { display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-bottom:10px; }
+      .method { font-size:12px; font-weight:700; padding:4px 8px; border-radius:999px; border:1px solid #e5e5e5; background:#fafafa; letter-spacing:.04em; }
+      code { font-family: ui-monospace, monospace; background:#f3f3f3; padding:2px 6px; border-radius:6px; font-size:13px; }
+  
+      h3 { margin:14px 0 6px; font-size:12px; text-transform:uppercase; letter-spacing:.08em; color:#555; }
+      ul { margin:6px 0 0 18px; padding:0; }
+      li { margin:4px 0; }
+  
+      .resp { padding:10px 12px; border:1px solid #f0f0f0; border-radius:10px; background:#fff; margin-top:8px; }
+      .resp-head { display:flex; gap:10px; align-items:center; flex-wrap:wrap; margin-bottom:6px; }
+      .badge { font-size:12px; font-weight:600; padding:2px 8px; border-radius:999px; border:1px solid #e5e5e5; background:#fafafa; }
+  
+      .code-wrap { position:relative; margin-top:10px; }
+      pre { background:#f6f6f6; padding:14px; border-radius:10px; overflow:auto; margin:0; }
+  
+      .copy-icon {
+        position:absolute; top:8px; right:8px; width:28px; height:28px;
+        display:flex; align-items:center; justify-content:center;
+        border-radius:6px; cursor:pointer;
+        opacity:0; transition: opacity .2s ease, background .2s ease;
+      }
+      .code-wrap:hover .copy-icon { opacity:1; }
+      .copy-icon:hover { background:#eaeaea; }
+      .copy-icon svg { width:16px; height:16px; stroke:#555; }
+      .copy-icon.copied svg { stroke:#0a7f2e; }
+  
+      .err { padding:12px; border:1px solid #ffd0d0; background:#fff3f3; border-radius:10px; color:#7a1c1c; white-space: pre-wrap; }
+    `;
+    document.head.appendChild(style);
+  
+    const hdr = document.createElement('header');
+    hdr.textContent = title;
+    document.body.prepend(hdr);
+  
+    const main = document.createElement('main');
+    document.body.appendChild(main);
+    return main;
+  }
