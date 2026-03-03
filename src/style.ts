@@ -10,15 +10,23 @@ export function injectBaseStyle(title: string): HTMLElement {
       .grp h2 { margin:18px 0 10px; font-size:14px; text-transform:uppercase; letter-spacing:.08em; color:#444; }
   
       /* Collapsible endpoint cards */
-      .ep { border:1px solid #eee; border-radius:12px; margin:16px 0; overflow:hidden; }
+      .ep { 
+        border:1px solid #dcdcdc;
+        border-radius:12px; 
+        margin:16px 0; 
+        overflow:hidden; 
+      }
       .ep-summary { padding:16px; cursor:pointer; list-style:none; display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
       .ep-summary::-webkit-details-marker { display:none; }
-      .ep[open] .ep-summary { border-bottom:1px solid #f0f0f0; background:#fcfcfc; }
+      .ep[open] .ep-summary { 
+        border-bottom:1px solid #e2e2e2; 
+        background:#f4f6f8;
+      }
       .ep-body { padding:0 16px 16px; }
       .ep-summary-text { color:#666; font-size:13px; }
 
       .ep-title { display:flex; gap:10px; align-items:center; flex-wrap:wrap; }
-      
+
       .method { font-size:12px; font-weight:700; padding:4px 8px; border-radius:999px; border:1px solid #e5e5e5; background:#fafafa; letter-spacing:.04em; }
       code { font-family: ui-monospace, monospace; background:#f3f3f3; padding:2px 6px; border-radius:6px; font-size:13px; }
   
