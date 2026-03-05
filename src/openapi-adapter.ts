@@ -110,7 +110,7 @@ export class OpenApiAdapter {
     if (!schema) return undefined;
 
     const description = typeof rb.description === 'string' ? rb.description : undefined;
-    const example = pickExample({ media, schema });
+    const example = pickExample({ media, schema, resolver: this.resolver });
 
     return { contentType: ct, schema, description, example };
   }
@@ -134,7 +134,7 @@ export class OpenApiAdapter {
 
       const media = isRecord(content) ? (content as any)[ct] : undefined;
       const schema = media?.schema ? this.resolver.resolve(media.schema) : undefined;
-      const example = pickExample({ media, schema });
+      const example = pickExample({ media, schema, resolver: this.resolver });
 
       out.push({
         status,
