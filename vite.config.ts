@@ -1,20 +1,11 @@
 import { defineConfig } from 'vite';
+import react from '@vitejs/plugin-react';
 
 export default defineConfig({
+  plugins: [react()],
+  base: './',
   build: {
-    lib: {
-      entry: 'src/main.ts',
-      name: 'OpenApiMiniDocs',
-      formats: ['iife'],
-      fileName: () => 'minidocs.min.js'
-    },
     outDir: 'dist',
     emptyOutDir: true,
-    cssCodeSplit: false,
-    rollupOptions: {
-      output: {
-        inlineDynamicImports: true,
-      },
-    },
   }
 });
