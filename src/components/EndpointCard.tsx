@@ -15,7 +15,7 @@ export function EndpointCard({ endpoint, showExamples, factory }: EndpointCardPr
     <details className="ep">
       <summary className="ep-summary">
         <div className="ep-title">
-          <span className="method">{endpoint.method}</span>
+          <span className={`method method-${endpoint.method.toLowerCase()}`}>{endpoint.method}</span>
           <code>{endpoint.path}</code>
         </div>
         {endpoint.summary && <span className="ep-summary-text">{endpoint.summary}</span>}

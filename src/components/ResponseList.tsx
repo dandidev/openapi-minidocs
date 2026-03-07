@@ -19,7 +19,7 @@ export function ResponseList({ responses, showExamples, factory }: ResponseListP
       {responses.map((r) => (
         <div key={r.status} className="resp">
           <div className="resp-head">
-            <span className="badge">{r.status}</span>
+            <span className={`badge ${/^2/.test(String(r.status)) ? 'badge-2xx' : /^4/.test(String(r.status)) ? 'badge-4xx' : /^5/.test(String(r.status)) ? 'badge-5xx' : ''}`}>{r.status}</span>
             {r.contentType && <code>{r.contentType}</code>}
             {r.contentType && ' → '}
             {r.schema ? (
