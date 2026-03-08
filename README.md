@@ -15,12 +15,17 @@ npm install
 npm run dev
 ```
 
-- Build for production
+- Build SPA app
 ```bash
 npm run build
 ```
 
-- Preview production build
+- Build single-file CDN bundle
+```bash
+npm run build:min
+```
+
+- Preview SPA build
 ```bash
 npm run preview
 ```
@@ -49,6 +54,17 @@ npm run format:check
 
 ### Usage
 
-This is a React + TypeScript application that renders OpenAPI documentation. The app loads an OpenAPI specification from a URL and displays it in a structured, interactive format.
+```html
+<div id="docs"></div>
 
-To customize the configuration, edit the `DEFAULT_CONFIG` in `src/config.ts` or modify `src/App.tsx` to accept configuration via props or environment variables.
+<script src="https://cdn.jsdelivr.net/gh/dandidev/openapi-minidocs@v1.0.0/dist/minidocs.min.js"></script>
+
+<script>
+MiniDocs.mount('#docs', {
+  title: 'Example API',
+  specUrl: '/openapi?format=json',
+  groupBy: 'tag',
+  showExamples: true
+});
+</script>
+```
