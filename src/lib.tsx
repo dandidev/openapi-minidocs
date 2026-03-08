@@ -20,9 +20,16 @@ function resolveElement(target: MountTarget): HTMLElement {
   return element;
 }
 
+function resolveConfig(config?: Partial<MiniDocsConfig>): MiniDocsConfig {
+  return {
+    ...DEFAULT_CONFIG,
+    ...config,
+  };
+}
+
 export function mount(
   target: MountTarget,
-  config: MiniDocsConfig = DEFAULT_CONFIG
+  config?: Partial<MiniDocsConfig>
 ): void {
   const element = resolveElement(target);
 
@@ -32,16 +39,20 @@ export function mount(
     roots.set(element, root);
   }
 
-  root.render(<App config={config} />);
+  const resolvedConfig = resolveConfig(config);
+  
+  if (!resolvedConfig.specUrl) {
+    throw new Error('MiniDocs: specUrl is required');
+  }
+
+  root.render(<App config={resolvedConfig} />);
 }
 
 export function unmount(target: MountTarget): void {
   const element = resolveElement(target);
   const root = roots.get(element);
 
-  if (!root) {
-    return;
-  }
+  if (!root) return;
 
   root.unmount();
   roots.delete(element);

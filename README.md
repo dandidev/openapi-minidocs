@@ -58,7 +58,13 @@ npm run format:check
 <div id="docs"></div>
 
 <script src="https://cdn.jsdelivr.net/gh/dandidev/openapi-minidocs@v1.0.0/dist/minidocs.min.js"></script>
+
 <script>
-  MiniDocs.mount('#docs');
+MiniDocs.mount('#docs', {
+  title: 'Example API',
+  specUrl: '/openapi?format=json',
+  groupBy: 'tag',
+  showExamples: true
+});
 </script>
 ```

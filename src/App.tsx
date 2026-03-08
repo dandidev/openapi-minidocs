@@ -54,5 +54,11 @@ export function App({ config }: AppProps) {
     return null;
   }
 
-  return <DocsView spec={spec} config={config} />;
+  return (
+    <DocsView
+      spec={spec}
+      groupBy={config.groupBy}
+      showExamples={config.showExamples}
+    />
+  );
 }
